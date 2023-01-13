@@ -1,9 +1,9 @@
 // IMPORTS
-const express = require('express');
-const client = require('../client');
 const jwt = require('jsonwebtoken');
+const UsersService = require('../services/usersService');
+const bcrypt = require('bcrypt');
 
-const usersService = new UsersService();
+const usersService = new UsersService;
 
 class UsersController {
     async login(req, res) {
