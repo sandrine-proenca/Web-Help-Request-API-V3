@@ -14,7 +14,7 @@ const authenticateJWT = (req, res, next) => {
                 return res.sendStatus(403);
             }
 
-            req.body.tokenId = token.id;
+            req.userId = token.userId;
             next();
         });
     } else {

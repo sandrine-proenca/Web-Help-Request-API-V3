@@ -5,11 +5,14 @@ const UsersController = require('../controllers/usersController');
 //const accessTokenSecret = 'youraccesstokensecret';
 
 const usersRouter = express.Router();
+const usersController = new UsersController();
 
 
-usersRouter.post('/register', (req, res) => UsersController.register(req, res));
-usersRouter.post('/login', (req, res) => UsersController.login(req, res));
+usersRouter.post('/register', usersController.register);
+usersRouter.post('/login', usersController.login);
 
+
+module.exports = usersRouter;
 
 /*
 // POST DU REGISTER
@@ -55,4 +58,3 @@ usersRouter.post('/register', async (req, res) => {
         catch (err) {
             console.log(err.stack);};});});*/
 
-module.exports = usersRouter;
