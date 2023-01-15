@@ -183,7 +183,7 @@ class TicketsController {
             }
             res.status(201).json({
                 status: "SUCCESS",
-                message: "Les tickets a été supprimé",
+                message: "Le ticket a été supprimé",
                 data: tickets
             });
         }

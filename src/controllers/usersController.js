@@ -71,9 +71,10 @@ class UsersController {
                 const data = await usersService.addUser(name, hash);
                 res.status(201).json({
                     status: "SUCCESS",
-                    message: `Le mot de passe de ${name} est valide`,
+                    message: `Le nom: ${name} et son mot de passe associé sont validés`,
                     data: data.rows
-                });
+                });                
+                console.log(`${req.method} | ${req.originalUrl} |  \nLe nom: ${name} et son mot de passe associé sont validés`);
             }
             catch (err) {
                 res.status(500).json(
