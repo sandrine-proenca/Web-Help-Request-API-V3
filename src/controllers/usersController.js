@@ -10,7 +10,7 @@ class UsersController {
         const { name, password } = req.body;
         // vérifier le nom de l'utilisateur existe
         if (name === undefined || typeof name !== typeof String()) {
-            res.status(400).json({
+            res.status(403).json({
                 status: "FAIL",
                 message: "Le nom est inexistant ou invalide",
                 data: undefined
@@ -20,7 +20,7 @@ class UsersController {
         }
         // vérifier le mot de passe existe
         if (password === undefined || typeof password !== typeof String()) {
-            res.status(400).json({
+            res.status(403).json({
                 status: "FAIL",
                 message: "Le mot de passe n'existe pas",
                 data: undefined
@@ -34,7 +34,7 @@ class UsersController {
                 bcrypt.compare(password, data.rows[0].password, function (err, result) {
                     const accessToken = jwt.sign({ userId: data.rows[0].id }, process.env.TOKEN_SECRET);
                     if (result === true) {
-                        res.status(200).json({
+                        res.status(201).json({
                             status: "SUCCESS",
                             message: `Nom et Password valides.`,
                             data: { ...data.rows[0], token: accessToken }
@@ -42,7 +42,7 @@ class UsersController {
                         console.log(`${req.method} | ${req.originalUrl} |  \nNom et Password valides`);
                     }
                     else {
-                        res.status(400).json({
+                        res.status(404).json({
                             status: "FAIL",
                             message: `Le password est incorrect`,
                             data: undefined
@@ -53,6 +53,12 @@ class UsersController {
             }
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack);
         };
     }
@@ -63,13 +69,19 @@ class UsersController {
         bcrypt.hash(password, 10, async (err, hash) => {
             try {
                 const data = await usersService.addUser(name, hash);
-                res.status(200).json({
+                res.status(201).json({
                     status: "SUCCESS",
                     message: `Le mot de passe de ${name} est valide`,
                     data: data.rows
                 });
             }
             catch (err) {
+                res.status(500).json(
+                    {
+                        status: "FAIL",
+                        message: "erreur serveur"
+                    }
+                )
                 console.log(err.stack);
             };
         });

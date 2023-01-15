@@ -11,7 +11,7 @@ class TicketsController {
         try {
             const tickets = await ticketsService.getAllTickets();
             if (tickets === undefined) {
-                res.status(400).json({
+                res.status(403).json({
                     status: "FAIL",
                     message: "Il n'y a aucun ticket",
                     data: undefined
@@ -26,6 +26,12 @@ class TicketsController {
             });
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack)
         }
     }
@@ -37,7 +43,7 @@ class TicketsController {
             const ticket = await ticketsService.getTicketsById(ticketsId);
             // message d'erreur
             if (ticket === undefined) {
-                res.status(400).json({
+                res.status(403).json({
                     status: "FAIL",
                     message: "Le ticket n'existe pas",
                     data: undefined
@@ -52,6 +58,12 @@ class TicketsController {
             });
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack);
         }
     };
@@ -64,7 +76,7 @@ class TicketsController {
         console.log(userId);
         // message d'erreur
         if (problem === undefined || typeof problem !== typeof String()) {
-            res.status(400).json({
+            res.status(403).json({
                 status: "FAIL",
                 message: "Obligation d'avoir un PROBLEM en string",
                 data: undefined
@@ -73,7 +85,7 @@ class TicketsController {
             return;
         }
         if (done === undefined || typeof done !== typeof Boolean()) {
-            res.status(400).json({
+            res.status(403).json({
                 status: "FAIL",
                 message: "Obligation d'avoir un DONE en boolean",
                 data: undefined
@@ -99,6 +111,12 @@ class TicketsController {
             });
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack);
         }
     }
@@ -111,7 +129,7 @@ class TicketsController {
         console.log(userId);
         // message d'erreur
         if (!(problem || done !== undefined)) {
-            res.status(400).json({
+            res.status(403).json({
                 status: "FAIL",
                 message: "Structure incorrect",
                 data: undefined
@@ -121,7 +139,7 @@ class TicketsController {
         try {
             const ticket = await ticketsService.putTickets(problem, done, userId);
             if (ticket === undefined) {
-                res.status(400).json({
+                res.status(403).json({
                     status: "FAIL",
                     message: "Le ticket est inexistant",
                     data: undefined
@@ -137,6 +155,12 @@ class TicketsController {
             console.log(`${req.method} | ${req.originalUrl} | \nLe ticket a bien été modifié`);
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack);
         }
     }
@@ -149,7 +173,7 @@ class TicketsController {
         try {
             const tickets = await ticketsService.deleteTickets(id, userId);
             if (tickets === undefined) {
-                res.status(400).json({
+                res.status(403).json({
                     status: "FAIL",
                     message: "Il n'y a aucun ticket",
                     data: undefined
@@ -164,6 +188,12 @@ class TicketsController {
             });
         }
         catch (err) {
+            res.status(500).json(
+                {
+                    status: "FAIL",
+                    message: "erreur serveur"
+                }
+            )
             console.log(err.stack)
         }
     }
