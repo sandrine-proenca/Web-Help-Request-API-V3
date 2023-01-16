@@ -126,6 +126,7 @@ class TicketsController {
         console.log("test put", req.body);
         const { problem, done } = req.body;
         const userId = req.userId;
+        const id = req.params.id;
         console.log(userId);
         // message d'erreur
         if (!(problem || done !== undefined)) {
@@ -137,9 +138,20 @@ class TicketsController {
                 console.log(`${req.method} | ${req.originalUrl} | \n Structure incorrect`);
         }
         try {
-            const ticket = await ticketsService.putTickets(problem, done, userId);
-            if (ticket === undefined) {
+            const validTicket = ticketsService.getTicketsById(id);
+
+            if (validTicket && validTicket.user_id !== userId) {
                 res.status(403).json({
+                    status: "FAIL",
+                    message: "Le ticket n'est pas a vous",
+                    data: undefined
+                });
+
+                return;
+            }
+            const ticket = await ticketsService.putTickets(id, problem, done, userId);
+            if (validTicket === undefined) {
+                res.status(404).json({
                     status: "FAIL",
                     message: "Le ticket est inexistant",
                     data: undefined
@@ -150,7 +162,7 @@ class TicketsController {
             res.status(201).json({
                 status: "SECCESS",
                 message: `Le ticket a bien été modifié`,
-                data: ticket
+                data: validTicket
             });
             console.log(`${req.method} | ${req.originalUrl} | \nLe ticket a bien été modifié`);
         }

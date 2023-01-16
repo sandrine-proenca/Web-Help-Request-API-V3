@@ -31,13 +31,13 @@ class UsersController {
         try {
             const user = await usersService.getUserByName(name);
             if (user) {
-                bcrypt.compare(password, data.rows[0].password, function (err, result) {
-                    const accessToken = jwt.sign({ userId: data.rows[0].id }, process.env.TOKEN_SECRET);
+                bcrypt.compare(password, user.password, function (err, result) {
+                    const accessToken = jwt.sign({ userId: user.id }, process.env.TOKEN_SECRET);
                     if (result === true) {
                         res.status(201).json({
                             status: "SUCCESS",
                             message: `Nom et Password valides.`,
-                            data: { ...data.rows[0], token: accessToken }
+                            data: accessToken
                         });
                         console.log(`${req.method} | ${req.originalUrl} |  \nNom et Password valides`);
                     }

@@ -31,9 +31,9 @@ class TicketsService {
     }
 
     // modification d'un ticket défini et les messages d'erreur
-    async putTickets(problem, done, userId) {
+    async putTickets(id, problem, done, userId) {
         console.log("test PUT ticketsService")
-        const data = await client.query('UPDATE tickets SET problem =$1, done =$2 WHERE user_id =$3 RETURNING*', [problem, done, userId]);
+        const data = await client.query('UPDATE tickets SET problem =$2, done =$3 WHERE id =$1 RETURNING*', [id,problem, done, userId]);
         if (data.rowCount) {
             return data.rows[0];
         }
